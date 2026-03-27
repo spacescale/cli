@@ -27,5 +27,8 @@ func newRootCmd() *cobra.Command {
 		},
 	}
 
+	rootCmd.AddCommand(newVersionCmd(printer))
+	rootCmd.AddCommand(newLoginCmd(printer))
+
 	return rootCmd
 }

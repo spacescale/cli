@@ -1,0 +1,66 @@
+version: 2
+
+project_name: spacescale
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: spacescale
+    main: ./main.go
+    binary: spacescale
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w -X github.com/spacescale/cli/internal/version.Version={{ .Version }} -X github.com/spacescale/cli/internal/version.Commit={{ .Commit }} -X github.com/spacescale/cli/internal/version.Date={{ .Date }}
+
+archives:
+  - id: spacescale-archive
+    builds:
+      - spacescale
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  use: git
+
+release:
+  github:
+    owner: spacescale
+    name: cli
+
+brews:
+  - repository:
+      owner: spacescale
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: https://spacescale.io
+    description: SpaceScale command line interface
+    license: MIT
+    test: |
+      system "#{bin}/spacescale", "version"
+    commit_author:
+      name: spacescale-bot
+      email: oss@spacescale.io
+    install: |
+      bin.install "spacescale"
