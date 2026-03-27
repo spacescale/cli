@@ -2,6 +2,8 @@
 
 The command line interface for SpaceScale.
 
+Note: everything in this repository is still stubbed and under active setup, including the CLI commands, release flow, and packaging automation.
+
 ## Development
 
 ```bash
