@@ -1,4 +1,4 @@
-# SpaceScale CLI
+# CLI
 
 The command line interface for SpaceScale.
 
